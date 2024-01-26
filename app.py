@@ -1,26 +1,40 @@
-import streamlit as st 
-import pandas as pd 
-import numpy as np
-import seaborn as sns 
+from openai import OpenAI
+import streamlit as st
+import os
 
-st.title("Sales KPI Dashboard with nice charts")
+st.title("ChatGPT-like clone")
 
-st.markdown('## Key Metrics')
+#client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-col1, col2, col3 = st.columns(3)
-col1.metric(label = "SPDR S&P 500", value = '%.2f' %200.12 , delta = "-$1.25")
-col2.metric("FTEC", "$121.10", "0.46%")
-col3.metric("BTC", "$46,583.91", "+4.87%")
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
 
-st.markdown('## Detailed Charts')
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-chart1, chart2 = st.columns(2)
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-chart_data = pd.DataFrame(
-    np.random.randn(20, 3),
-    columns=['a', 'b', 'c'])
+if prompt := st.chat_input("What is up?"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
-
-
-chart1.bar_chart(chart_data)
-chart2.line_chart(chart_data)
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        #for response in client.chat.completions.create(
+        #    model=st.session_state["openai_model"],
+        #    messages=[
+        #        {"role": m["role"], "content": m["content"]}
+        #        for m in st.session_state.messages
+        #    ],
+        #    stream=True,
+        #):
+        #    full_response += (response.choices[0].delta.content or "")
+        #    message_placeholder.markdown(full_response + "▌")
+        full_response += ("Hello from OpenAI")
+        message_placeholder.markdown(full_response + "▌")
+        message_placeholder.markdown(full_response)
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
