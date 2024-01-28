@@ -36,7 +36,7 @@ if prompt := st.chat_input("What is up?"):
         initial_assistant_message = {"role": "assistant", "content": "Hello, I am your AI assistant. How can I help you today?"}
         messages_for_openai = [initial_assistant_message] + [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
         for response in client.chat.completions.create(
-            model=st.session_state["openai_model"],
+            model="gpt-4",
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
