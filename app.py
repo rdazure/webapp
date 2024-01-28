@@ -1,9 +1,8 @@
 import streamlit as st
 import openai
+#from dotenv import load_dotenv
 import os
-from dotenv import load_dotenv
-import os
-load_dotenv()
+#load_dotenv()
 
 # Set your OpenAI key
 #openai.api_key = 'your-api-key'
