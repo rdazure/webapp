@@ -34,20 +34,19 @@ if prompt := st.chat_input("What is up?"):
         message_placeholder = st.empty()
         full_response = ""
         initial_assistant_message = {"role": "assistant", "content": "Hello, I am your AI assistant. How can I help you today?"}
-        messages_for_openai = [initial_assistant_message] + [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
+        full_response = ""
         for response in client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        ):
-            full_response += (response.choices[0].delta.content or "")
+                model="gpt-4",
+                messages= [initial_assistant_message] + [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages],
+                stream=True,
+            ):
+
+            if len(response.choices) > 0:
+                delta = response.choices[0].delta
+            if delta.role:
+                full_response += ""
+            if delta.content:
+                full_response += delta.content
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
-
-
-
-
