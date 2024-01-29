@@ -37,7 +37,7 @@ def main_app():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("What is up?"):
+    if prompt := st.chat_input("Assist me in negotiating my contract. My top priority is obtaining the best possible price."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
@@ -45,7 +45,8 @@ def main_app():
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
             full_response = ""
-            initial_assistant_message = {"role": "assistant", "content": "Hello, I am your AI assistant. How can I help you today?"}
+            init_p = "You are a sophisticated chatbot acting as a seller in a contract negotiation. Your task is to negotiate the terms of a contract with a customer. The contract's starting offer is a 3-year term with a price range of $1000 to $1500. Your objective is to maximize the contract's value, taking into account the customer's preferences, which could be focused on either the price or the term length. You should aim to be flexible within these parameters and make strategic adjustments based on the customer's responses. Your responses should be professional, persuasive, and aim to find a mutually agreeable solution."
+            initial_assistant_message = {"role": "assistant", "content": init_p}
             full_response = ""
             for response in client.chat.completions.create(
                     model="gpt-4",
