@@ -43,10 +43,10 @@ if prompt := st.chat_input("What is up?"):
 
             if len(response.choices) > 0:
                 delta = response.choices[0].delta
-            if delta.role:
-                full_response += ""
-            if delta.content:
-                full_response += delta.content
-            message_placeholder.markdown(full_response + "▌")
-        message_placeholder.markdown(full_response)
+                if delta.role:
+                    full_response += ""
+                if delta.content:
+                    full_response += delta.content
+                message_placeholder.markdown(full_response + "▌")
+            message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
